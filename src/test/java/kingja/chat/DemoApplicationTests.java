@@ -1,4 +1,4 @@
-package kingja.demo;
+package kingja.chat;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
