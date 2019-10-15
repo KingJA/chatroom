@@ -12,8 +12,10 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- import Vue before Element -->
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
-    <!-- import JavaScript -->
+    <!--<script th:src="@{/js/element2.12.0.js}"></script>-->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    <!-- import JavaScript -->
     <!--<link rel="stylesheet" href="/static/css" type="text/css">-->
 </head>
 <body>
@@ -24,6 +26,7 @@
         <button type="button" class="btn btn-primary btn-lg btn-block" v-on:click="comfirm">登录</button>
     </div>
 </div>
+<script  th:src="@{/js/ELUtil.js} "></script>
 <script>
     var app = new Vue({
         el: '#app',
@@ -42,14 +45,14 @@
                         username: this.username,
                         password: this.password
                     }
-                }).then(function (response) {
+                }).then((response) => {
                     if (response.data.code == 0) {
                         window.location.href="/chatroom/home";
                     }else{
-                        console.log('失败:'+ response.data);
+                        ELUI.showDialog(response.data.msg);
                     }
-                }).catch(function (error) {
-                    console.log("error:"+error);
+                }).catch((error) => {
+                    ELUI.showDialog(error);
                 });
             },
             reverseMessage: function () {

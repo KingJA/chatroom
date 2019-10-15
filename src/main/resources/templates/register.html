@@ -13,7 +13,6 @@
     <!-- import Vue before Element -->
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <!-- import JavaScript -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <!--<link rel="stylesheet" href="/static/css" type="text/css">-->
 </head>
 <body>
@@ -42,18 +41,31 @@
                         username: this.username,
                         password: this.password
                     }
-                }).then(function (response) {
+                }).then((response) => {
                     if (response.data.code == 0) {
-                        window.location.href="/user/root";
-                    }else{
-                        console.log('失败:'+ response.data);
+                        this.toLogin()
+                    } else {
+                        this.showConfirmDialog(response.data.msg);
                     }
-                }).catch(function (error) {
-                    console.log("error:"+error);
+                }).catch((error) => {
+                    this.showConfirmDialog(error);
                 });
             },
             reverseMessage: function () {
                 console.log('reverseMessage');
+            },
+            showConfirmDialog(msg) {
+                this.$alert(msg, '提示', {
+                    confirmButtonText: '确定',
+                });
+            },
+            toLogin() {
+                this.$alert('注册成功', '提示', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        window.location.href = "/user/to_login";
+                    }
+                });
             }
         }
     })

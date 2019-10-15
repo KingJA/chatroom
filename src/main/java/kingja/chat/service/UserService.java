@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 
 import kingja.chat.dao.UserDao;
 import kingja.chat.exception.ResultException;
+import kingja.chat.form.FormLogin;
 import kingja.chat.form.FormRegister;
 import kingja.chat.result.CodeMsg;
+import kingja.chat.util.UuidUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -27,8 +29,17 @@ public class UserService {
         if (count > 0) {
             throw new ResultException(CodeMsg.HAS_REGISTERED);
         }
-        int count = userDao.addUser(formRegister);
+
+        int result = userDao.addUser(UuidUtil.uuid(),formRegister.getUsername(),formRegister.getPassword());
         log.info("count:"+count);
 
+    }
+
+    public void login(FormLogin formLogin) {
+        int count = userDao.checkUser(formLogin.getUsername(),formLogin.getPassword());
+        log.info("count:"+count);
+        if (count == 0) {
+            throw new ResultException(CodeMsg.ACCOUNT_ERROR);
+        }
     }
 }

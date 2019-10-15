@@ -25,4 +25,7 @@ public interface UserDao {
 
     @Insert("insert into user(id,username,password)values(#{id},#{username},#{password})")
     int addUser(@Param("id") String id, @Param("username") String username, @Param("password") String password);
+
+    @Select("select count(*) from user where username = #{username} and password = #{password}")
+    int checkUser(@Param("username")String username,@Param("password") String password);
 }

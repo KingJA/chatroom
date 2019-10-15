@@ -21,9 +21,5 @@ public class ChatController {
         return "chatroom";
     }
 
-    @RequestMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("loginName", "kingja");
-        return "login";
-    }
+
 }
