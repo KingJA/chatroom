@@ -32,6 +32,7 @@ public class CodeMsg {
 
     public static CodeMsg HAS_REGISTERED = new CodeMsg(500216, "该用户已经存在");
     public static CodeMsg ACCOUNT_ERROR = new CodeMsg(500217, "账号或密码错误");
+    public static CodeMsg UN_LOGIINED = new CodeMsg(500218, "用户未登录");
 
     //商品模块 5003XX
 

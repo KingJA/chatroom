@@ -40,7 +40,7 @@
                 console.log('password' + this.password);
                 axios({
                     method: 'post',
-                    url: '/user/login',
+                    url: '/api/user/login',
                     data: {
                         username: this.username,
                         password: this.password
@@ -49,7 +49,7 @@
                     if (response.data.code == 0) {
                         window.location.href="/chatroom/home";
                     }else{
-                        ELUI.showDialog(response.data.msg);
+                        ELUI.showError(response.data.msg);
                     }
                 }).catch((error) => {
                     ELUI.showDialog(error);

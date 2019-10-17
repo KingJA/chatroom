@@ -20,7 +20,7 @@ import kingja.chat.service.UserService;
  * Email:kingjavip@gmail.com
  */
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
     @Autowired
     UserService userService;
