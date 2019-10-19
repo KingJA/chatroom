@@ -31,13 +31,12 @@ public class UserService {
         }
 
         int result = userDao.addUser(UuidUtil.uuid(),formRegister.getUsername(),formRegister.getPassword());
-        log.info("count:"+count);
+        log.info("result:"+result);
 
     }
 
     public void login(FormLogin formLogin) {
         int count = userDao.checkUser(formLogin.getUsername(),formLogin.getPassword());
-        log.info("count:"+count);
         if (count == 0) {
             throw new ResultException(CodeMsg.ACCOUNT_ERROR);
         }

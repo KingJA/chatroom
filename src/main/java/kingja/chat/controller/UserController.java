@@ -20,7 +20,7 @@ import kingja.chat.service.UserService;
  * Email:kingjavip@gmail.com
  */
 @Controller
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     UserService userService;
@@ -28,6 +28,11 @@ public class UserController {
     @PostMapping("/login")
     @ResponseBody
     public Result login(@RequestBody FormLogin formLogin) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         userService.login(formLogin);
         return Result.success("登录成功");
     }
@@ -35,8 +40,13 @@ public class UserController {
     @PostMapping("/register")
     @ResponseBody
     public Result register(@RequestBody FormRegister formRegister) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         userService.register(formRegister);
-        return Result.success("注册成功");
+        return Result.simpleSuccess("注册成功");
     }
 
     @RequestMapping("/to_register")
