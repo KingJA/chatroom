@@ -1,4 +1,4 @@
-package kingja.chat;
+package kingja.chat.webstocket;
 
 import org.springframework.stereotype.Component;
 
