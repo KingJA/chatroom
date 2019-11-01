@@ -46,6 +46,11 @@ public class CodeMsg {
     public static CodeMsg MIAOSHA_FAIL = new CodeMsg(500502, "秒杀失败");
 
 
+    //连接
+    public static CodeMsg CONNECT_CREATE_ERROR = new CodeMsg(600100, "连接创建异常");
+    public static CodeMsg CONNECT_COUNT_ERROR = new CodeMsg(600101, "连接人数异常");
+
+
 
 
     public CodeMsg fillArgs(Object...args) {
@@ -67,4 +72,7 @@ public class CodeMsg {
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
+
+
 }
