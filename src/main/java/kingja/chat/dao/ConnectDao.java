@@ -4,6 +4,9 @@ package kingja.chat.dao;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import kingja.chat.dto.DConnect;
 
 /**
  * Description:TODO
@@ -13,7 +16,12 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface ConnectDao {
-    @Insert("insert into connect(id,connectId,adminId,password,maxCount,needCheck)values(#{id},#{connectId},#{adminId},#{password},#{maxCount},#{needCheck})")
+
+    @Insert("insert into connect(id,connectId,adminId,password,maxCount,needCheck)values(#{id},#{connectId}," +
+            "#{adminId},#{password},#{maxCount},#{needCheck})")
     int create(@Param("id") String id, @Param("connectId") String connectId, @Param("adminId") String adminId
             , @Param("password") String password, @Param("maxCount") int maxCount, @Param("needCheck") int needCheck);
+
+    @Select("Select connectId,adminId,password,maxCount,needCheck From connect Where connectId=#{connectId}")
+    DConnect getConnectById(String connectId);
 }

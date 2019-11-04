@@ -1,14 +1,10 @@
 package kingja.chat.filter;
 
 
-import com.google.gson.Gson;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +17,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import kingja.chat.result.CodeMsg;
-import kingja.chat.result.Result;
 
 /**
  * Description:TODO
@@ -44,7 +37,6 @@ public class CorsWebFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-        logger.error("自定义过滤器->doFilter");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String origin = request.getHeader("Origin");
@@ -65,12 +57,6 @@ public class CorsWebFilter implements Filter {
         }
 
         response.setHeader("Access-Control-Expose-Headers", "*");
-
-//        if (request.getMethod().equals("OPTIONS")) {
-//            HttpUtil.setResponse(response, HttpStatus.OK.value(), null);
-//            return;
-//        }
-
         logger.error("path:"+request.getServletPath());
         if(!request.getServletPath().contains("admin")){
             filterChain.doFilter(servletRequest, servletResponse);

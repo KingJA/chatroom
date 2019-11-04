@@ -37,4 +37,13 @@ public class FormConnect {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "FormConnect{" +
+                "fingerprint='" + fingerprint + '\'' +
+                ", connectId='" + connectId + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

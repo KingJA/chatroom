@@ -30,7 +30,7 @@ import javax.websocket.server.ServerEndpoint;
  *     虽然@Component默认是单例模式的，但springboot还是会为每个websocket连接初始化一个bean，
  *     所以可以用一个静态set保存起来。
  */
-@ServerEndpoint("/websocket/{nickname}")
+@ServerEndpoint("/websocket/{connectId}/{fingerprint}")
 @Component
 public class WebSocketListener {
 
@@ -43,7 +43,7 @@ public class WebSocketListener {
 
 
     //存放<连接号,WebStocket客户端列表>
-    private static ConcurrentHashMap<String, WebSocketListener> webSocketMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, ConcurrentHashMap<String, CopyOnWriteArraySet<WebSocketListener>>> webSocketMap = new ConcurrentHashMap<>();
 
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
@@ -55,11 +55,12 @@ public class WebSocketListener {
      * @param session 可选的参数。session为与某个客户端的连接会话，需要通过它来给客户端发送数据
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("nickname") String nickname) {
+    public void onOpen(Session session, @PathParam("connectId") String connectId,
+                       @PathParam("fingerprint") String fingerprint) {
         this.session = session;
         webSocketSet.add(this);     //加入set中
         addOnlineCount();           //在线数加1
-        System.out.println(nickname + " 加入聊天！当前在线人数为" + getOnlineCount());
+        System.out.println(fingerprint + " 加入连接" + connectId + "！当前在线人数为" + getOnlineCount());
     }
 
     /**
