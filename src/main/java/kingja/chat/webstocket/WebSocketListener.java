@@ -1,11 +1,14 @@
 package kingja.chat.webstocket;
 
+import com.google.gson.Gson;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import javax.annotation.PostConstruct;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -13,6 +16,11 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+
+import kingja.chat.entity.StocketBody;
+import kingja.chat.redis.ConnectKey;
+import kingja.chat.redis.RedisService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Description:TODO
@@ -32,22 +40,26 @@ import javax.websocket.server.ServerEndpoint;
  */
 @ServerEndpoint("/websocket/{connectId}/{fingerprint}")
 @Component
+@Slf4j
 public class WebSocketListener {
 
-
-    //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
-    private static int onlineCount = 0;
-
+    public static WebSocketListener listener;
     //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
     private static CopyOnWriteArraySet<WebSocketListener> webSocketSet = new CopyOnWriteArraySet<WebSocketListener>();
 
-
     //存放<连接号,WebStocket客户端列表>
-    private static ConcurrentHashMap<String, ConcurrentHashMap<String, CopyOnWriteArraySet<WebSocketListener>>> webSocketMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, ConcurrentHashMap<String, Session>> webSocketSessionMap =
+            new ConcurrentHashMap<>();
 
-    //与某个客户端的连接会话，需要通过它来给客户端发送数据
-    private Session session;
 
+    @PostConstruct
+    public void init() {
+        listener = this;
+        listener.redisService = this.redisService;
+    }
+
+    @Autowired
+    RedisService redisService;
 
     /**
      * 连接建立成功调用的方法
@@ -57,20 +69,39 @@ public class WebSocketListener {
     @OnOpen
     public void onOpen(Session session, @PathParam("connectId") String connectId,
                        @PathParam("fingerprint") String fingerprint) {
-        this.session = session;
-        webSocketSet.add(this);     //加入set中
-        addOnlineCount();           //在线数加1
-        System.out.println(fingerprint + " 加入连接" + connectId + "！当前在线人数为" + getOnlineCount());
+        ConcurrentHashMap<String, Session> connnectIdMap = webSocketSessionMap.get(connectId);
+        if (connnectIdMap == null) {
+            connnectIdMap = new ConcurrentHashMap<>();
+        }
+        if (connnectIdMap.containsKey(fingerprint)) {
+            //已经加入连接
+            session.getAsyncRemote().sendText(new Gson().toJson(new StocketBody(2,"请勿重复加入连接")));
+        }else{
+            connnectIdMap.put(fingerprint, session);
+            webSocketSessionMap.put(connectId,connnectIdMap);
+
+            listener.redisService.incr(ConnectKey.ConnectId, connectId);
+            log.info(String.format("用户加入，当前连接号%s的连接数:%d", connectId, listener.redisService.get(ConnectKey.ConnectId
+                    , connectId, Integer.class)) );
+        }
+
     }
 
     /**
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(@PathParam("nickname") String nickname) {
-        webSocketSet.remove(this);  //从set中删除
-        subOnlineCount();           //在线数减1
-        System.out.println(nickname + " 离开聊天！当前在线人数为" + getOnlineCount());
+    public void onClose(Session session, @PathParam("connectId") String connectId,
+                        @PathParam("fingerprint") String fingerprint) {
+
+        ConcurrentHashMap<String, Session> connnectIdMap = webSocketSessionMap.get(connectId);
+        if (connnectIdMap != null&&connnectIdMap.containsKey(fingerprint)) {
+            log.info("离开，remove" );
+            connnectIdMap.remove(fingerprint);
+            listener.redisService.decr(ConnectKey.ConnectId, connectId);
+        }
+        log.info(String.format("用户离开，当前连接号%s的连接数:%d", connectId, listener.redisService.get(ConnectKey.ConnectId
+                , connectId, Integer.class)) );
     }
 
     /**
@@ -80,14 +111,21 @@ public class WebSocketListener {
      * @param session 可选的参数
      */
     @OnMessage
-    public void onMessage(String message, Session session, @PathParam("nickname") String nickname) {
-        System.out.println(nickname + ":" + message);
-        message = nickname + ":" + message;
-        //群发消息
-        for (WebSocketListener item : webSocketSet) {
+    public void onMessage(String message, Session session, @PathParam("connectId") String connectId,
+                          @PathParam("fingerprint") String fingerprint) {
+        log.info(String.format("连接号%s的%s发来消息:%s", connectId, fingerprint, message));
+        ConcurrentHashMap<String, Session> connnectIdMap = webSocketSessionMap.get(connectId);
+        for(String key : connnectIdMap.keySet()){
+            Session item = connnectIdMap.get(key);
+            StocketBody stocketBody = new StocketBody();
+            stocketBody.setFingerprint(fingerprint);
+            stocketBody.setContent(message);
+//            stocketBody.setIsAdmin(fingerprint);
+            stocketBody.setIsMyself(session.getId().equals(item.getId())?1:0);
+            stocketBody.setOrderType(1);
             try {
-                item.sendMessage(message);
-            } catch (IOException e) {
+                item.getAsyncRemote().sendText(new Gson().toJson(stocketBody));
+            } catch (Exception e) {
                 e.printStackTrace();
                 continue;
             }
@@ -106,26 +144,4 @@ public class WebSocketListener {
         error.printStackTrace();
     }
 
-    /**
-     * 这个方法与上面几个方法不一样。没有用注解，是根据自己需要添加的方法。
-     *
-     * @param message
-     * @throws IOException
-     */
-    public void sendMessage(String message) throws IOException {
-        this.session.getBasicRemote().sendText(message);
-        //this.session.getAsyncRemote().sendText(message);
-    }
-
-    public static synchronized int getOnlineCount() {
-        return onlineCount;
-    }
-
-    public static synchronized void addOnlineCount() {
-        WebSocketListener.onlineCount++;
-    }
-
-    public static synchronized void subOnlineCount() {
-        WebSocketListener.onlineCount--;
-    }
 }

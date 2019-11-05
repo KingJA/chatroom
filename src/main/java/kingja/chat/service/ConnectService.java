@@ -94,7 +94,7 @@ public class ConnectService {
         cookie.setPath("/");
         cookie.setMaxAge(JwtUtil.TTLMILLS);
         response.addCookie(cookie);
-        log.info("加入cookie成功:" + jwt);
+//        log.info("加入cookie成功:" + jwt);
 
     }
 }
