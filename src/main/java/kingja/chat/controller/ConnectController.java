@@ -17,6 +17,7 @@ import kingja.chat.redis.RedisService;
 import kingja.chat.redis.UserKey;
 import kingja.chat.result.Result;
 import kingja.chat.service.ConnectService;
+import kingja.chat.vo.ConnectInfo;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -46,8 +47,7 @@ public class ConnectController {
         }
         log.info("formCreate : " + formCreate.toString());
         redisService.set(UserKey.getById,"1","001");
-        connectService.create(formCreate);
-        return Result.success("创建成功");
+        return Result.success(connectService.create(formCreate));
     }
 
     @PostMapping("/connect")

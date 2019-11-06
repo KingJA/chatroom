@@ -75,14 +75,14 @@ public class WebSocketListener {
         }
         if (connnectIdMap.containsKey(fingerprint)) {
             //已经加入连接
-            session.getAsyncRemote().sendText(new Gson().toJson(new StocketBody(2,"请勿重复加入连接")));
-        }else{
+            session.getAsyncRemote().sendText(new Gson().toJson(new StocketBody(2, "请勿重复加入连接")));
+        } else {
             connnectIdMap.put(fingerprint, session);
-            webSocketSessionMap.put(connectId,connnectIdMap);
+            webSocketSessionMap.put(connectId, connnectIdMap);
 
             listener.redisService.incr(ConnectKey.ConnectId, connectId);
             log.info(String.format("用户加入，当前连接号%s的连接数:%d", connectId, listener.redisService.get(ConnectKey.ConnectId
-                    , connectId, Integer.class)) );
+                    , connectId, Integer.class)));
         }
 
     }
@@ -95,13 +95,13 @@ public class WebSocketListener {
                         @PathParam("fingerprint") String fingerprint) {
 
         ConcurrentHashMap<String, Session> connnectIdMap = webSocketSessionMap.get(connectId);
-        if (connnectIdMap != null&&connnectIdMap.containsKey(fingerprint)) {
-            log.info("离开，remove" );
+        if (connnectIdMap != null && connnectIdMap.containsKey(fingerprint) && connnectIdMap.get(fingerprint).getId().equals(session.getId())) {
+            log.info("离开，remove");
             connnectIdMap.remove(fingerprint);
             listener.redisService.decr(ConnectKey.ConnectId, connectId);
         }
         log.info(String.format("用户离开，当前连接号%s的连接数:%d", connectId, listener.redisService.get(ConnectKey.ConnectId
-                , connectId, Integer.class)) );
+                , connectId, Integer.class)));
     }
 
     /**
@@ -115,13 +115,13 @@ public class WebSocketListener {
                           @PathParam("fingerprint") String fingerprint) {
         log.info(String.format("连接号%s的%s发来消息:%s", connectId, fingerprint, message));
         ConcurrentHashMap<String, Session> connnectIdMap = webSocketSessionMap.get(connectId);
-        for(String key : connnectIdMap.keySet()){
+        for (String key : connnectIdMap.keySet()) {
             Session item = connnectIdMap.get(key);
             StocketBody stocketBody = new StocketBody();
             stocketBody.setFingerprint(fingerprint);
             stocketBody.setContent(message);
 //            stocketBody.setIsAdmin(fingerprint);
-            stocketBody.setIsMyself(session.getId().equals(item.getId())?1:0);
+            stocketBody.setIsMyself(session.getId().equals(item.getId()) ? 1 : 0);
             stocketBody.setOrderType(1);
             try {
                 item.getAsyncRemote().sendText(new Gson().toJson(stocketBody));

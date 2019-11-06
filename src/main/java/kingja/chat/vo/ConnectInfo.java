@@ -1,25 +1,18 @@
-package kingja.chat.dto;
+package kingja.chat.vo;
 
 /**
  * Description:TODO
- * Create Time:2019/11/4 0004 上午 11:47
+ * Create Time:2019/11/6 0006 下午 3:49
  * Author:KingJA
  * Email:kingjavip@gmail.com
  */
-public class DConnect {
+public class ConnectInfo {
     private String connectId;
-    private String adminFp;
+    private String adminCode;
     private String password;
+    private int needLimitCount;
     private int maxCount;
-    private short needCheck;
-
-    public String getadminFp() {
-        return null == adminFp ? "" : adminFp;
-    }
-
-    public void setadminFp(String adminFp) {
-        this.adminFp = adminFp;
-    }
+    private int needCheck;
 
     public String getConnectId() {
         return null == connectId ? "" : connectId;
@@ -27,6 +20,14 @@ public class DConnect {
 
     public void setConnectId(String connectId) {
         this.connectId = connectId;
+    }
+
+    public String getAdminCode() {
+        return null == adminCode ? "" : adminCode;
+    }
+
+    public void setAdminCode(String adminCode) {
+        this.adminCode = adminCode;
     }
 
     public String getPassword() {
@@ -37,6 +38,14 @@ public class DConnect {
         this.password = password;
     }
 
+    public int getNeedLimitCount() {
+        return needLimitCount;
+    }
+
+    public void setNeedLimitCount(int needLimitCount) {
+        this.needLimitCount = needLimitCount;
+    }
+
     public int getMaxCount() {
         return maxCount;
     }
@@ -45,22 +54,11 @@ public class DConnect {
         this.maxCount = maxCount;
     }
 
-    public short getNeedCheck() {
+    public int getNeedCheck() {
         return needCheck;
     }
 
-    public void setNeedCheck(short needCheck) {
+    public void setNeedCheck(int needCheck) {
         this.needCheck = needCheck;
-    }
-
-    @Override
-    public String toString() {
-        return "DConnect{" +
-                "connectId='" + connectId + '\'' +
-                ", adminFp='" + adminFp + '\'' +
-                ", password='" + password + '\'' +
-                ", maxCount=" + maxCount +
-                ", needCheck=" + needCheck +
-                '}';
     }
 }

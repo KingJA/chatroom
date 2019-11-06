@@ -41,7 +41,6 @@ public class CorsWebFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String origin = request.getHeader("Origin");
         String headers = request.getHeader("Access-Control-Request-Headers");
-        logger.error("headers:"+headers);
         if (origin == null) {
             origin = request.getHeader("Referer");
         }

@@ -17,11 +17,12 @@ import kingja.chat.dto.DConnect;
 @Mapper
 public interface ConnectDao {
 
-    @Insert("insert into connect(id,connectId,adminId,password,maxCount,needCheck)values(#{id},#{connectId}," +
-            "#{adminId},#{password},#{maxCount},#{needCheck})")
-    int create(@Param("id") String id, @Param("connectId") String connectId, @Param("adminId") String adminId
-            , @Param("password") String password, @Param("maxCount") int maxCount, @Param("needCheck") int needCheck);
+    @Insert("insert into connect(id,connectId,adminFp,adminCode,password,needLimitCount,maxCount,needCheck)values(#{id}," +
+            "#{connectId},#{adminFp},#{adminCode},#{password},#{needLimitCount},#{maxCount},#{needCheck})")
+    int create(@Param("id") String id, @Param("connectId") String connectId, @Param("adminFp") String adminFp,
+               @Param("adminCode") String adminCode, @Param("password") String password,
+               @Param("needLimitCount") int needLimitCount,@Param("maxCount") int maxCount, @Param("needCheck") int needCheck);
 
-    @Select("Select connectId,adminId,password,maxCount,needCheck From connect Where connectId=#{connectId}")
+    @Select("Select connectId,adminFp,password,maxCount,needCheck From connect Where connectId=#{connectId}")
     DConnect getConnectById(String connectId);
 }

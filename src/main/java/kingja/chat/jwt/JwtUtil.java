@@ -78,7 +78,7 @@ public class JwtUtil {
     public static void main(String[] args) {
 
         Token kobe = new Token();
-        kobe.setAdminId("1");
+        kobe.setadminFp("1");
         kobe.setConnectId("2");
         kobe.setFingerPrint("3");
         String jsonStr = new Gson().toJson(kobe);

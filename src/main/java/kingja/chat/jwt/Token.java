@@ -9,7 +9,7 @@ package kingja.chat.jwt;
 public class Token {
     private String connectId;
     private String fingerPrint;
-    private String adminId;
+    private String adminFp;
 
     public String getConnectId() {
         return null == connectId ? "" : connectId;
@@ -27,12 +27,12 @@ public class Token {
         this.fingerPrint = fingerPrint;
     }
 
-    public String getAdminId() {
-        return null == adminId ? "" : adminId;
+    public String getadminFp() {
+        return null == adminFp ? "" : adminFp;
     }
 
-    public void setAdminId(String adminId) {
-        this.adminId = adminId;
+    public void setadminFp(String adminFp) {
+        this.adminFp = adminFp;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Token {
         return "Token{" +
                 "connectId='" + connectId + '\'' +
                 ", fingerPrint='" + fingerPrint + '\'' +
-                ", adminId='" + adminId + '\'' +
+                ", adminFp='" + adminFp + '\'' +
                 '}';
     }
 }
