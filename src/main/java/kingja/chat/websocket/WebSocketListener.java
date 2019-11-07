@@ -1,7 +1,8 @@
-package kingja.chat.webstocket;
+package kingja.chat.websocket;
 
 import com.google.gson.Gson;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
  *     虽然@Component默认是单例模式的，但springboot还是会为每个websocket连接初始化一个bean，
  *     所以可以用一个静态set保存起来。
  */
-@ServerEndpoint("/websocket/{connectId}/{fingerprint}")
+@ServerEndpoint("/websocket/{connectId}/{fingerprint}/{adminCode}")
 @Component
 @Slf4j
 public class WebSocketListener {
@@ -68,7 +69,7 @@ public class WebSocketListener {
      */
     @OnOpen
     public void onOpen(Session session, @PathParam("connectId") String connectId,
-                       @PathParam("fingerprint") String fingerprint) {
+                       @PathParam("fingerprint") String fingerprint,@PathParam("adminCode") String adminCode) {
         ConcurrentHashMap<String, Session> connnectIdMap = webSocketSessionMap.get(connectId);
         if (connnectIdMap == null) {
             connnectIdMap = new ConcurrentHashMap<>();
@@ -81,9 +82,13 @@ public class WebSocketListener {
             webSocketSessionMap.put(connectId, connnectIdMap);
 
             listener.redisService.incr(ConnectKey.ConnectId, connectId);
-            log.info(String.format("用户加入，当前连接号%s的连接数:%d", connectId, listener.redisService.get(ConnectKey.ConnectId
+            log.info(String.format((!"undefined".equals(adminCode)?"群主":"用户")+"加入，当前连接号%s的连接数:%d", connectId, listener.redisService.get(ConnectKey.ConnectId
                     , connectId, Integer.class)));
         }
+
+        /**
+         * 用户使用jwt进行连接，参数包括connectId，fingerprint
+         */
 
     }
 
@@ -92,7 +97,7 @@ public class WebSocketListener {
      */
     @OnClose
     public void onClose(Session session, @PathParam("connectId") String connectId,
-                        @PathParam("fingerprint") String fingerprint) {
+                        @PathParam("fingerprint") String fingerprint,@PathParam("adminCode") String adminCode) {
 
         ConcurrentHashMap<String, Session> connnectIdMap = webSocketSessionMap.get(connectId);
         if (connnectIdMap != null && connnectIdMap.containsKey(fingerprint) && connnectIdMap.get(fingerprint).getId().equals(session.getId())) {
@@ -100,7 +105,7 @@ public class WebSocketListener {
             connnectIdMap.remove(fingerprint);
             listener.redisService.decr(ConnectKey.ConnectId, connectId);
         }
-        log.info(String.format("用户离开，当前连接号%s的连接数:%d", connectId, listener.redisService.get(ConnectKey.ConnectId
+        log.info(String.format((!"undefined".equals(adminCode)?"群主":"用户")+"离开，当前连接号%s的连接数:%d", connectId, listener.redisService.get(ConnectKey.ConnectId
                 , connectId, Integer.class)));
     }
 
@@ -112,8 +117,8 @@ public class WebSocketListener {
      */
     @OnMessage
     public void onMessage(String message, Session session, @PathParam("connectId") String connectId,
-                          @PathParam("fingerprint") String fingerprint) {
-        log.info(String.format("连接号%s的%s发来消息:%s", connectId, fingerprint, message));
+                          @PathParam("fingerprint") String fingerprint,@PathParam("adminCode") String adminCode) {
+        log.info(String.format((!"undefined".equals(adminCode)?"群主":"用户")+"连接号%s的%s发来消息:%s", connectId, fingerprint, message));
         ConcurrentHashMap<String, Session> connnectIdMap = webSocketSessionMap.get(connectId);
         for (String key : connnectIdMap.keySet()) {
             Session item = connnectIdMap.get(key);

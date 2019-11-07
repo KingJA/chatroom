@@ -10,14 +10,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 
-import kingja.chat.access.AccessLimit;
 import kingja.chat.form.FormConnect;
 import kingja.chat.form.FormCreate;
 import kingja.chat.redis.RedisService;
 import kingja.chat.redis.UserKey;
 import kingja.chat.result.Result;
 import kingja.chat.service.ConnectService;
-import kingja.chat.vo.ConnectInfo;
 import lombok.extern.slf4j.Slf4j;
 
 /**

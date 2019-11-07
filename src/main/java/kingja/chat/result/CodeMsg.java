@@ -50,8 +50,9 @@ public class CodeMsg {
     public static CodeMsg CONNECT_CREATE_ERROR = new CodeMsg(600100, "连接创建异常");
     public static CodeMsg CONNECT_COUNT_ERROR = new CodeMsg(600101, "连接人数异常");
     public static CodeMsg CONNECT_CONNECTID_ERROR = new CodeMsg(600102, "连接号错误，请重新输入");
-    public static CodeMsg CONNECT_NEEDPASSWORD_ERROR = new CodeMsg(600102, "该连接需要密码");
-    public static CodeMsg CONNECT_WRONGPASSWORD_ERROR = new CodeMsg(600102, "连接密码错误");
+    public static CodeMsg CONNECT_NEEDPASSWORD_ERROR = new CodeMsg(600103, "该连接需要密码");
+    public static CodeMsg CONNECT_WRONGPASSWORD_ERROR = new CodeMsg(600104, "连接密码错误");
+    public static CodeMsg CONNECT_ADMINCODE_ERROR = new CodeMsg(600105, "标识码错误");
 
 
 

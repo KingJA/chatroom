@@ -1,4 +1,4 @@
-package kingja.chat.webstocket;
+package kingja.chat.websocket;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

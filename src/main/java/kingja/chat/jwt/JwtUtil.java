@@ -30,7 +30,7 @@ public class JwtUtil {
 
     private static Logger logger = LoggerFactory.getLogger(JwtUtil.class);
     public static int TTLMILLS = 1000 * 60 * 60*5;
-    public static String TOKEN_NAME = "TOKEN";
+    public static String TOKEN_NAME = "YYYYY";
 
     //该方法使用HS256算法和Secret:bankgl生成signKey
     private static Key getKeyInstance() {

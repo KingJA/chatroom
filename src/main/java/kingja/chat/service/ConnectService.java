@@ -83,6 +83,14 @@ public class ConnectService {
 //        log.info("connectInfo : " + connectInfo.toString());
         //连接数是否已超
 
+
+        //是否有标识码 场景：通过输入标识码进行连接
+        String inputAdminCode = formConnect.getAdminCode();
+        String dbAdminCode = connectInfo.getAdminCode();
+        if (!StringUtils.isEmpty(inputAdminCode) && !inputAdminCode.equals(dbAdminCode)) {
+            throw new ResultException(CodeMsg.CONNECT_ADMINCODE_ERROR);
+        }
+
         //是否有连接密码
         String inputPassword = formConnect.getPassword();
         String dbPassword = connectInfo.getPassword();
@@ -102,7 +110,7 @@ public class ConnectService {
         Token token = new Token();
         token.setFingerPrint(formConnect.getFingerprint());
         token.setFingerPrint(connectInfo.getConnectId());
-        token.setFingerPrint(connectInfo.getadminFp());
+        token.setFingerPrint(connectInfo.getAdminFp());
 
         String jwt = JwtUtil.createJWT(formConnect.getFingerprint(), new Gson().toJson(token), JwtUtil.TTLMILLS);
         Cookie cookie = new Cookie(JwtUtil.TOKEN_NAME, jwt);

@@ -14,6 +14,17 @@ public class FormConnect {
     /*连接密码*/
     private String password;
 
+    /*创建者标识码*/
+    private String adminCode;
+
+    public String getAdminCode() {
+        return null == adminCode ? "" : adminCode;
+    }
+
+    public void setAdminCode(String adminCode) {
+        this.adminCode = adminCode;
+    }
+
     public String getFingerprint() {
         return null == fingerprint ? "" : fingerprint;
     }
@@ -44,6 +55,7 @@ public class FormConnect {
                 "fingerprint='" + fingerprint + '\'' +
                 ", connectId='" + connectId + '\'' +
                 ", password='" + password + '\'' +
+                ", adminCode='" + adminCode + '\'' +
                 '}';
     }
 }

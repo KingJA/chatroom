@@ -23,6 +23,6 @@ public interface ConnectDao {
                @Param("adminCode") String adminCode, @Param("password") String password,
                @Param("needLimitCount") int needLimitCount,@Param("maxCount") int maxCount, @Param("needCheck") int needCheck);
 
-    @Select("Select connectId,adminFp,password,maxCount,needCheck From connect Where connectId=#{connectId}")
+    @Select("Select connectId,adminCode,adminFp,password,maxCount,needCheck From connect Where connectId=#{connectId}")
     DConnect getConnectById(String connectId);
 }

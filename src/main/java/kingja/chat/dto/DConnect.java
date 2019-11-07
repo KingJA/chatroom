@@ -10,16 +10,9 @@ public class DConnect {
     private String connectId;
     private String adminFp;
     private String password;
+    private String adminCode;
     private int maxCount;
     private short needCheck;
-
-    public String getadminFp() {
-        return null == adminFp ? "" : adminFp;
-    }
-
-    public void setadminFp(String adminFp) {
-        this.adminFp = adminFp;
-    }
 
     public String getConnectId() {
         return null == connectId ? "" : connectId;
@@ -29,12 +22,28 @@ public class DConnect {
         this.connectId = connectId;
     }
 
+    public String getAdminFp() {
+        return null == adminFp ? "" : adminFp;
+    }
+
+    public void setAdminFp(String adminFp) {
+        this.adminFp = adminFp;
+    }
+
     public String getPassword() {
         return null == password ? "" : password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAdminCode() {
+        return null == adminCode ? "" : adminCode;
+    }
+
+    public void setAdminCode(String adminCode) {
+        this.adminCode = adminCode;
     }
 
     public int getMaxCount() {
@@ -59,6 +68,7 @@ public class DConnect {
                 "connectId='" + connectId + '\'' +
                 ", adminFp='" + adminFp + '\'' +
                 ", password='" + password + '\'' +
+                ", adminCode='" + adminCode + '\'' +
                 ", maxCount=" + maxCount +
                 ", needCheck=" + needCheck +
                 '}';
