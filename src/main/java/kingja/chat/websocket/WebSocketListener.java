@@ -80,14 +80,13 @@ public class WebSocketListener {
         } else {
             connnectIdMap.put(fingerprint, session);
             webSocketSessionMap.put(connectId, connnectIdMap);
-
             listener.redisService.incr(ConnectKey.ConnectId, connectId);
             log.info(String.format((!"undefined".equals(adminCode)?"群主":"用户")+"加入，当前连接号%s的连接数:%d", connectId, listener.redisService.get(ConnectKey.ConnectId
                     , connectId, Integer.class)));
         }
 
         /**
-         * 用户使用jwt进行连接，参数包括connectId，fingerprint
+         * 用户使用jwt进行连接，参数包括connectId，fingerprint,群主Id
          */
 
     }
