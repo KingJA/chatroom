@@ -6,7 +6,7 @@ package kingja.chat.entity;
  * Author:KingJA
  * Email:kingjavip@gmail.com
  */
-public class StocketBody {
+public class SocketBody {
     /*指纹*/
     private String fingerprint;
     /*内容*/
@@ -18,10 +18,10 @@ public class StocketBody {
     /*1 消息体 2 警告*/
     private int orderType;
 
-    public StocketBody() {
+    public SocketBody() {
     }
 
-    public StocketBody(int orderType, String content) {
+    public SocketBody(int orderType, String content) {
         this.orderType = orderType;
         this.content = content;
     }

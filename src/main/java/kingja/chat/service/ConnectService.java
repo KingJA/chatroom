@@ -72,7 +72,7 @@ public class ConnectService {
         connectInfo.setPassword(password);
         return connectInfo;
     }
-
+    private static final String NORMAL_ADMINCODE = "000000";
     public void connect(FormConnect formConnect, HttpServletResponse response) {
         String connectId = formConnect.getConnectId();
         //获取连接号信息
@@ -87,7 +87,7 @@ public class ConnectService {
         //是否有标识码 场景：通过输入标识码进行连接
         String inputAdminCode = formConnect.getAdminCode();
         String dbAdminCode = connectInfo.getAdminCode();
-        if (!StringUtils.isEmpty(inputAdminCode) && !inputAdminCode.equals(dbAdminCode)) {
+        if (!NORMAL_ADMINCODE.equals(inputAdminCode) && !inputAdminCode.equals(dbAdminCode)) {
             throw new ResultException(CodeMsg.CONNECT_ADMINCODE_ERROR);
         }
 
