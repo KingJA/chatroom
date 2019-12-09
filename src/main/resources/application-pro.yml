@@ -1,0 +1,36 @@
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+  datasource:
+    url: jdbc:mysql://13.231.99.2:3306/chat?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password: Wzy1gqqbuu
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jackson:
+    default-property-inclusion: non_null
+
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+      additional-exclude: WEB-INF/**
+
+
+mybatis:
+  type-aliases-package: kingja.chat.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 3000
+
+redis:
+  host: 13.231.99.2
+  port: 6379
+  timeout: 10
+  password: Wzy1gqqbuu
+  poolMaxTotal: 10
+  poolMaxIdle: 10
+  poolMaxWait: 10
+
