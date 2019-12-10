@@ -34,3 +34,6 @@ redis:
   poolMaxIdle: 10
   poolMaxWait: 10
 
+server:
+  port: 8090
+

@@ -32,3 +32,11 @@ redis:
   poolMaxTotal: 10
   poolMaxIdle: 10
   poolMaxWait: 10
+
+server:
+  port: 8090
+
+
+logging:
+  path: H:\android\apps\chatroom\docs\log\mylog
+#  file: ./log/mylog.log

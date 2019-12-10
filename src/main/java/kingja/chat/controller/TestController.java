@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kingja.chat.form.FormLogin;
 import kingja.chat.form.FormRegister;
 import kingja.chat.result.Result;
 import kingja.chat.service.UserService;
@@ -21,21 +20,10 @@ import kingja.chat.service.UserService;
  */
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class TestController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/login")
-    @ResponseBody
-    public Result login(@RequestBody FormLogin formLogin) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        userService.login(formLogin);
-        return Result.success("登录成功");
-    }
 
     @PostMapping("/register")
     @ResponseBody
@@ -52,10 +40,5 @@ public class UserController {
     @RequestMapping("/to_register")
     public String register() {
         return "register";
-    }
-
-    @RequestMapping("/to_login")
-    public String login() {
-        return "login";
     }
 }
