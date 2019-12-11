@@ -44,7 +44,12 @@ public class ConnectController {
             e.printStackTrace();
         }
         log.info("formCreate : " + formCreate.toString());
-        redisService.set(UserKey.getById,"1","001");
+        log.error("日志过滤 : error");
+        log.warn("日志过滤 : warn");
+        log.info("日志过滤 : info");
+        log.debug("日志过滤 : debug");
+        log.trace("日志过滤 : trace");
+        redisService.set(UserKey.getById, "1", "001");
         return Result.success(connectService.create(formCreate));
     }
 
@@ -57,7 +62,7 @@ public class ConnectController {
             e.printStackTrace();
         }
         log.info("formConnect : " + formConnect.toString());
-        connectService.connect(formConnect,response);
+        connectService.connect(formConnect, response);
         return Result.success("连接成功");
     }
 }

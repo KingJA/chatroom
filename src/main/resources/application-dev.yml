@@ -36,7 +36,3 @@ redis:
 server:
   port: 8090
 
-
-logging:
-  path: H:\android\apps\chatroom\docs\log\mylog
-#  file: ./log/mylog.log
